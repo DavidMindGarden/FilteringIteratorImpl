@@ -3,7 +3,7 @@ package com.pimco.codetest.iterator;
 import java.util.Iterator;
 
 /**
- * Created by xiaodongcao on 2/20/17.
+ * Created by xiaodongcao on 2/21/17.
  *
  * Decorator design pattern
  * To override iterator methods using wrapped iterator
@@ -17,7 +17,6 @@ public class FilteringIterator<E> implements Iterator<E> {
     private Iterator<E> innerIterator;
     private IObjectTest<E> innerTest;
     private E nextElement;
-    private boolean hasNextElement = true;
 
     /**
      * Create a new FilteringIterator with another Iterator and IObjectTest
@@ -39,27 +38,38 @@ public class FilteringIterator<E> implements Iterator<E> {
      * Find the header that pass the object test
      */
     private void initFilteringIterator(){
+        findNextElement();
+    }
+
+    /**
+     * Find the next qualified elements
+     */
+    private void findNextElement(){
         while(innerIterator.hasNext()){
+            nextElement = innerIterator.next();
             if(innerTest.test(nextElement)){
-                nextElement = innerIterator.next();
                 return;
             }
         }
 
         nextElement = null;
-        hasNextElement = false;
     }
 
     @Override
     public E next(){
-        return nextElement;
+        E currentValue = nextElement;
+        findNextElement();
+        return currentValue;
     }
 
     @Override
     public boolean hasNext(){
-        return this.hasNextElement;
+        return this.nextElement != null;
     }
 
+    /**
+     * Always throws UnsupportedOperationException as this class does look-ahead with its internal iterator.
+     */
     @Override
     public void remove(){
         throw new UnsupportedOperationException();

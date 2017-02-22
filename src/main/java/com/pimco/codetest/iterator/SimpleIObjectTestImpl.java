@@ -3,10 +3,13 @@ package com.pimco.codetest.iterator;
 /**
  * Created by xiaodongcao on 2/21/17.
  */
-public class SimpleIObjectTestImpl<T> implements IObjectTest<T>{
+public class SimpleIObjectTestImpl implements IObjectTest<Integer>{
 
-    @Override
-    public void test(T m){
-
+    public boolean test(Integer m){
+        if(m.intValue() >= 3 && m.intValue() <8){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
